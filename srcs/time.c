@@ -21,7 +21,7 @@ unsigned long get_time_in_ms(void)
 	milliseconds = (tv.tv_sec * 1000L) + tv.tv_usec / 1000L;
 	return ((unsigned long)milliseconds);
 }
-
+/*
 int main()
 {
 	unsigned long	actual;
@@ -39,3 +39,4 @@ int main()
 	usleep(100000);
 	printf("%zu\n", get_time_in_ms() - actual);
 }
+*/

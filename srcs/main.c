@@ -57,7 +57,7 @@ int	init_prog(int ac, char **av, t_options *o)
 			[time_to_sleep]\n\
 			(number_of_times_each_philosopher_must_eat)\n"), 0);
 	if (set_program(ac, av, o) == NULL)
-		return (printf("Error: Couldnt initiate program, exiting.\n"), 0);
+		return (0);
 	return (1);
 }
 
@@ -75,9 +75,14 @@ void	print_philoinit(t_options o)
 int	main(int ac, char **av)
 {
 	t_options	o;
+	t_table		table;
 
-	if (!init_prog(ac, av, &o))
-		return (1);
-	
+	table.pop = NULL;
+	table.forks = NULL;
+	if (init_prog(ac, av, &o) == 0)
+		return (printf("Couldn't initiate program.\n"), 1);
+	if (create_table(&table, o) == NULL)
+		return (printf("Couldn't create table.\n"), 2);
+	erase_table(&table, o.philo_nb);
 	return (0);
 }

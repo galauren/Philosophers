@@ -12,6 +12,80 @@
 
 #include "philosophers.h"
 
+void	erase_table(t_table *table, int forks_to_free)
+{
+	t_philo_list	*current;
+	t_philo_list	*next;
+	int		i;
+
+	if (!table)
+		return ;
+	i = -1;
+	while (++i < forks_to_free)
+	{
+		pthread_mutex_destroy(&(table->forks[i]));
+	}
+	free(table->forks);
+	table->forks = NULL;
+	if (!table->pop)
+		return ;
+	current = table->pop->next;
+	while (current && current != table->pop)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	free(table->pop);
+	table->pop = NULL;
+}
+
+
+t_philo_list	*add_philo(int id, t_table *table)
+{
+	t_philo_list	*root;
+	t_philo_list	*new;
+
+	root = table->pop;
+	if (!root || root->id != -1)
+		return (NULL);
+	new = malloc(sizeof(t_philo_list));
+	if (new != NULL)
+	{
+		new->id = id;
+		new->last_meal = table->start;
+		new->o = table->o;
+		new->l_fork = &(table->forks[id]);
+		new->r_fork = &(table->forks[(id + 1) % table->o.philo_nb]);
+		new->prev = root->prev;
+		new->next = root;
+		root->prev->next = new;
+		root->prev = new;
+	}
+	return (new);
+}
+
+t_table	*create_forks_and_philos(t_table *table, unsigned int nb)
+{
+	unsigned int	i;
+
+	i = 0;
+	while(i < nb)
+	{
+		if (pthread_mutex_init(&(table->forks[i]), NULL))
+			return (erase_table(table, i), NULL);
+		i++;
+	}
+	i = 0;
+	while(i < nb)
+	{
+		if (!add_philo(i, table))
+			return (erase_table(table, table->o.philo_nb), NULL);
+		i++;
+	}
+	return (table);
+}
+
 t_table	*create_table(t_table *table, t_options o)
 {
 	t_philo_list	*philo_root;
@@ -32,61 +106,9 @@ t_table	*create_table(t_table *table, t_options o)
 	if (table->forks == NULL)
 		return (free(philo_root), NULL);
 	table->stop = 0;
+	if (!create_forks_and_philos(table, o.philo_nb))
+		return (free(philo_root), free(table->forks), NULL);
 	return (table);
 }
 
-void	add_head(int id, t_philo_list *root)
-{
-	t_philo_list	*new;
 
-	new = malloc(sizeof(*new));
-	if (new != NULL)
-	{
-		new->id = id;
-		new->prev = root;
-		new->next = root->next;
-		root->next->prev = new;
-		root->next = new;
-	}
-}
-/*
-	int				countdown;
-
-	i = 0;
-	while(i < table->o.philo_nb)
-	{
-		add_tail()
-*/
-void	add_tail(int id, t_table *table)
-{
-	t_philo_list	*new;
-
-	new = malloc(sizeof(t_philo_list));
-	if (new != NULL)
-	{
-		new->id = id;
-		new->last_meal = table->start;
-		new->o = table->o;
-		new->l_fork = &table->forks[id];
-		new->r_fork = &table->forks[(id + 1) % table->o.philo_nb];
-		new->prev = root->prev;
-		new->next = root;
-		root->prev->next = new;
-		root->prev = new;
-	}
-}
-
-int	get_list_length(t_philo_list *a)
-{
-	t_philo_list	*tmp;
-	int				i;
-
-	tmp = a->next;
-	i = 0;
-	while (tmp != a)
-	{
-		tmp = tmp->next;
-		++i;
-	}
-	return (i);
-}

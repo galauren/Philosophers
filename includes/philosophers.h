@@ -15,6 +15,7 @@
 
 # include <limits.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <math.h>
 # include <unistd.h>
 # include <sys/time.h>
@@ -65,16 +66,14 @@ double			ft_strtod(const char *s);
 unsigned long	get_time_in_ms(void);
 
 /*
-**  /-------------------------------\
-**  \								/
-**  /\		      LISTS			   /\
-** /  \						      /  \
-** \---------------------------------/
+ /-------------------------------\
+  \								/
+  /\		      LISTS		   /\
+ /  \					      /  \
+\---------------------------------/
 */
 
 t_table			*create_table(t_table *table, t_options o);
-void			add_head(int val, t_philo_list *root);
-void			add_tail(int id, t_philo_list *root);
-int				get_list_length(t_philo_list *a);
+void			erase_table(t_table *table, int forks_to_free);
 
 #endif

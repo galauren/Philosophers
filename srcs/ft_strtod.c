@@ -19,18 +19,11 @@ int	ft_isdigit(int c)
 	return (0);
 }
 
-static int	is_sign_at_valid_pos(const char *s, int i)
-{
-	if (i == 0)
-		return (1);
-	return (0);
-}
-
 static int	is_valid_double_char_extended(const char *s, int i)
 {
 	if (s[i] == '+')
 	{
-		if (!is_sign_at_valid_pos(s, i))
+		if (i != 0)
 			return (0);
 	}
 	else if (!ft_isdigit(s[i]))
