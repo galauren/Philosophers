@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:54:12 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/20 16:49:32 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/23 04:05:51 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct s_options
 	int				has_meal_left;
 }	t_options;
 
+typedef struct s_table t_table;
+
 typedef struct s_philo_list
 {
 	int					id;
@@ -39,10 +41,10 @@ typedef struct s_philo_list
 	t_options			o;
 	pthread_mutex_t		*l_fork;				
 	pthread_mutex_t		*r_fork;				
-	pthread_mutex_t		speaking;				
-	pthread_mutex_t		checking;				
+	pthread_mutex_t		meal_lock;				
 	struct s_philo_list	*prev;
 	struct s_philo_list	*next;
+	t_table				*tblptr;
 }	t_philo_list;
 
 typedef struct s_table
@@ -50,25 +52,39 @@ typedef struct s_table
 	t_options		o;
 	t_philo_list	*pop;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	print_lock;				
+	pthread_mutex_t	death_lock;				
 	unsigned long	start;
-	char			stop;
+	char			stop_it;
 }	t_table;
-
-/*
-**-------------------------------------
-**
-**                UTILS			  
-**
-**-------------------------------------
-*/
-
-double			ft_strtod(const char *s);
-unsigned long	get_time_in_ms(void);
 
 /*
  /-------------------------------\
   \								/
-  /\		      LISTS		   /\
+  /\		   ALGO 		   /\
+ /  \					      /  \
+\---------------------------------/
+*/
+
+int				dinner_time(t_table *table);
+
+/*
+**--------------------------------
+**
+**             UTILS			  
+**
+**--------------------------------
+*/
+
+double			ft_strtod(const char *s);
+unsigned long	get_time_in_ms(void);
+unsigned long	get_time_since_start(void);
+void			micro_sleeps(unsigned long duration);
+
+/*
+ /-------------------------------\
+  \								/
+  /\	       LISTS		   /\
  /  \					      /  \
 \---------------------------------/
 */

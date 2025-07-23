@@ -6,13 +6,13 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:37:02 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/13 00:50:18 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/23 04:12:33 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-unsigned long get_time_in_ms(void)
+unsigned long	get_time_in_ms(void)
 {
 	struct timeval	tv;
 	long			milliseconds;
@@ -21,22 +21,24 @@ unsigned long get_time_in_ms(void)
 	milliseconds = (tv.tv_sec * 1000L) + tv.tv_usec / 1000L;
 	return ((unsigned long)milliseconds);
 }
-/*
-int main()
+unsigned long get_time_since_start(void)
 {
-	unsigned long	actual;
+    static unsigned long start = 0;
+    unsigned long now;
 
-	actual = get_time_in_ms();
-	printf("%zu\n", get_time_in_ms() - actual);
-	printf("%zu\n", get_time_in_ms() - actual);
-	printf("%zu\n", get_time_in_ms() - actual);
-	usleep(100);
-	printf("%zu\n", get_time_in_ms() - actual);
-	usleep(1000);
-	printf("%zu\n", get_time_in_ms() - actual);
-	usleep(10000);
-	printf("%zu\n", get_time_in_ms() - actual);
-	usleep(100000);
-	printf("%zu\n", get_time_in_ms() - actual);
+    if (start == 0)
+        start = get_time_in_ms();
+    now = get_time_in_ms();
+    return now - start;
 }
-*/
+
+void	micro_sleeps(unsigned long duration)
+{
+	unsigned long	start;
+
+	start = get_time_in_ms();
+	while (get_time_in_ms() - start < duration)
+	{
+		usleep(250);
+	}
+}

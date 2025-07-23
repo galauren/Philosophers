@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:46:44 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/20 16:52:36 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/23 04:00:55 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,16 @@ int	main(int ac, char **av)
 	table.forks = NULL;
 	if (init_prog(ac, av, &o) == 0)
 		return (printf("Couldn't initiate program.\n"), 1);
+	print_philoinit(o);
+	table.start = get_time_since_start() + (10 * o.philo_nb);
 	if (create_table(&table, o) == NULL)
 		return (printf("Couldn't create table.\n"), 2);
+	if (dinner_time(&table))
+	{
+		printf("The dinner had to stop unexpectedly.\n");
+		erase_table(&table, o.philo_nb);
+		return (3);
+	}
 	erase_table(&table, o.philo_nb);
 	return (0);
 }
