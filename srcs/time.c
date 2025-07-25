@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:37:02 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/23 04:12:33 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/23 06:54:06 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ unsigned long	get_time_in_ms(void)
 }
 unsigned long get_time_since_start(void)
 {
-    static unsigned long start = 0;
-    unsigned long now;
+	static unsigned long	start = 0;
+	unsigned long			now;
 
-    if (start == 0)
-        start = get_time_in_ms();
-    now = get_time_in_ms();
-    return now - start;
+	if (start == 0)
+		start = get_time_in_ms();
+	now = get_time_in_ms();
+	return (now - start);
 }
 
 void	micro_sleeps(unsigned long duration)

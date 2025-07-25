@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:46:44 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/23 04:00:55 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/25 08:45:17 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ t_options	*set_program(int ac, char **av, t_options *o)
 		if (tmp == NAN || !(tmp >= 0.0 && tmp / (double)UINT_MAX <= 1))
 			return (printf("'The nummber of Meals left' has not been set correctly.\n"), NULL);
 		o->meal_left = (unsigned int)tmp;
+		if (o->meal_left == 0)
+			return (printf("0 meal_left ? then let's just stop it before initializing.\n"), NULL);
 	}
 	if (o->philo_nb == 0
 		|| o->die == 0
@@ -82,7 +84,8 @@ int	main(int ac, char **av)
 	if (init_prog(ac, av, &o) == 0)
 		return (printf("Couldn't initiate program.\n"), 1);
 	print_philoinit(o);
-	table.start = get_time_since_start() + (10 * o.philo_nb);
+	get_time_since_start();
+	table.start = get_time_in_ms() + (5 * o.philo_nb);
 	if (create_table(&table, o) == NULL)
 		return (printf("Couldn't create table.\n"), 2);
 	if (dinner_time(&table))

@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:54:12 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/23 04:05:51 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/25 08:10:03 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_philo_list
 {
 	int					id;
 	pthread_t			thread;
-	unsigned long		last_meal;
+	unsigned long long	last_meal;
 	t_options			o;
 	pthread_mutex_t		*l_fork;				
 	pthread_mutex_t		*r_fork;				
@@ -49,13 +49,15 @@ typedef struct s_philo_list
 
 typedef struct s_table
 {
-	t_options		o;
-	t_philo_list	*pop;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	print_lock;				
-	pthread_mutex_t	death_lock;				
-	unsigned long	start;
-	char			stop_it;
+	t_options			o;
+	t_philo_list		*pop;
+	pthread_t			j_thread;
+	pthread_mutex_t		*forks;
+	pthread_mutex_t		print_lock;				
+	pthread_mutex_t		death_lock;				
+	unsigned long long	start;
+	char				stop_it;
+	unsigned int		finished_count;
 }	t_table;
 
 /*
@@ -67,6 +69,9 @@ typedef struct s_table
 */
 
 int				dinner_time(t_table *table);
+void			eating(t_philo_list *p);
+void			sleeping(t_philo_list *p);
+void			thinking(t_philo_list *p);
 
 /*
 **--------------------------------
@@ -80,6 +85,7 @@ double			ft_strtod(const char *s);
 unsigned long	get_time_in_ms(void);
 unsigned long	get_time_since_start(void);
 void			micro_sleeps(unsigned long duration);
+void			philo_status_print(t_philo_list *p, char *msg);
 
 /*
  /-------------------------------\
