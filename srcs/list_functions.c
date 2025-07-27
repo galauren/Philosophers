@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 21:48:39 by glaurent          #+#    #+#             */
-/*   Updated: 2025/07/25 08:57:01 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/27 09:08:48 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ void	erase_table(t_table *table, int forks_to_free)
 
 	if (!table)
 		return ;
-	if (!pthread_mutex_unlock(&(table->print_lock)))
-		pthread_mutex_destroy(&(table->print_lock));
-	if (!pthread_mutex_unlock(&(table->death_lock)))
-		pthread_mutex_destroy(&(table->death_lock));
+	if (!pthread_mutex_lock(&(table->print_lock)))
+		if (!pthread_mutex_unlock(&(table->print_lock)))
+			pthread_mutex_destroy(&(table->print_lock));
+	if (!pthread_mutex_lock(&(table->death_lock)))
+		if (!pthread_mutex_unlock(&(table->death_lock)))
+			pthread_mutex_destroy(&(table->death_lock));
 	i = -1;
 	while (++i < forks_to_free)
 		pthread_mutex_destroy(&(table->forks[i]));
@@ -35,12 +37,13 @@ void	erase_table(t_table *table, int forks_to_free)
 	while (current && current != table->pop)
 	{
 		next = current->next;
-		pthread_mutex_destroy(&(current->meal_lock));
+		if (!pthread_mutex_lock(&(current->meal_lock)))
+			if (!pthread_mutex_unlock(&(current->meal_lock)))
+				pthread_mutex_destroy(&(current->meal_lock));
 		free(current);
 		current = next;
 	}
 	free(table->pop);
-	table->pop = NULL;
 }
 
 
@@ -113,10 +116,12 @@ t_table	*create_table(t_table *table, t_options o)
 	philo_root->r_fork = NULL;
 	philo_root->prev = philo_root;
 	philo_root->next = philo_root;
-	philo_root->tblptr = NULL;
+	philo_root->tblptr = table;
 	table->stop_it = 0;
 	table->o = o;
 	table->pop = philo_root;	
+	if (table->o.philo_nb > 5000)
+		return (table);
 	if (!create_forks_and_philos(table, o.philo_nb))
 		return (free(philo_root), NULL);
 	return (table);

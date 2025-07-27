@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:54:12 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/25 08:10:03 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/27 08:57:37 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,9 @@ double			ft_strtod(const char *s);
 unsigned long	get_time_in_ms(void);
 unsigned long	get_time_since_start(void);
 void			micro_sleeps(unsigned long duration);
+void			smart_sleep(t_philo_list *p, unsigned long duration);
 void			philo_status_print(t_philo_list *p, char *msg);
+void			*print_too_much_prompt(t_philo_list *p);
 
 /*
  /-------------------------------\

@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:46:44 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/25 08:45:17 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/27 11:04:09 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,19 @@ int	init_prog(int ac, char **av, t_options *o)
 
 void	print_philoinit(t_options o)
 {
-	printf("\n			[number_of_philosophers] : %u\n\
+	char	*wtff;
+	char	*la_decision;
+
+	wtff = " ????????????????";
+	la_decision = " ";
+	if (o.philo_nb == 1 || o.philo_nb > 5000)
+		la_decision = wtff;
+	printf("\n			[number_of_philosophers] : %u %s\n\
 			[time_to_die] : %u\n\
 			[time_to_eat] : %u\n\
 			[time_to_sleep] : %u\n\
-			(number_of_times_each_philosopher_must_eat) : %u(%s)\n",
-				o.philo_nb, o.die, o.eat, o.sleep, o.meal_left,
+			(number_of_times_each_philosopher_must_eat) : %u(%s)\n\n\n\n",
+				o.philo_nb, la_decision, o.die, o.eat, o.sleep, o.meal_left,
 				o.has_meal_left ? "set" : "unset");
 }
 
@@ -85,15 +92,19 @@ int	main(int ac, char **av)
 		return (printf("Couldn't initiate program.\n"), 1);
 	print_philoinit(o);
 	get_time_since_start();
-	table.start = get_time_in_ms() + (5 * o.philo_nb);
+	table.start = get_time_in_ms() + 1000;
 	if (create_table(&table, o) == NULL)
 		return (printf("Couldn't create table.\n"), 2);
-	if (dinner_time(&table))
+	if (o.philo_nb > 5000)
+	{
+		micro_sleeps(1000);
+		print_too_much_prompt(table.pop);
+		return (erase_table(&table, 0), 3);
+	}
+	else if (dinner_time(&table))
 	{
 		printf("The dinner had to stop unexpectedly.\n");
-		erase_table(&table, o.philo_nb);
-		return (3);
+		return (erase_table(&table, o.philo_nb), 4);
 	}
-	erase_table(&table, o.philo_nb);
-	return (0);
+	return (erase_table(&table, o.philo_nb), 0);
 }

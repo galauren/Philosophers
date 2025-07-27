@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 05:08:59 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/25 09:14:24 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/27 07:55:26 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,20 @@ void	eating(t_philo_list *p)
 			return ;
 		}
 	}
+	if (p->tblptr->o.philo_nb == p->id + 1 && !pthread_mutex_lock(p->r_fork))
+		philo_status_print(p, "has taken a fork.");
 	pthread_mutex_lock(p->l_fork);
 	philo_status_print(p, "has taken a fork.");
-	pthread_mutex_lock(p->r_fork);
-	philo_status_print(p, "has taken a fork.");
+	if (p->tblptr->o.philo_nb != p->id + 1)
+	{
+		pthread_mutex_lock(p->r_fork);
+		philo_status_print(p, "has taken a fork.");
+	}
 	pthread_mutex_lock(&(p->meal_lock));
 	p->last_meal = get_time_since_start();
 	pthread_mutex_unlock(&(p->meal_lock));
 	philo_status_print(p, "is eating...");
-	micro_sleeps(p->o.eat);
+	smart_sleep(p, p->o.eat);
 	pthread_mutex_unlock(p->l_fork);
 	pthread_mutex_unlock(p->r_fork);
 }
@@ -45,7 +50,7 @@ void	eating(t_philo_list *p)
 void	sleeping(t_philo_list *p)
 {
 	philo_status_print(p, "is sleeping...");
-	micro_sleeps(p->o.sleep);
+	smart_sleep(p, p->o.sleep);
 }
 
 void	thinking(t_philo_list *p)
