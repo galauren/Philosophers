@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:10:06 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/27 11:29:46 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/30 06:40:46 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ void	*philo_do(void *ptr)
 	while (1)
 	{
 		usleep(1);
+		if (p->i_should_stop)
+			return (NULL);
 		pthread_mutex_lock(&(p->tblptr->death_lock));
 		if (p->tblptr->stop_it)
 			return (pthread_mutex_unlock(&(p->tblptr->death_lock)), NULL);

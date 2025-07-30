@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 21:48:39 by glaurent          #+#    #+#             */
-/*   Updated: 2025/07/27 09:08:48 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/30 06:39:54 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_philo_list	*add_philo(int id, t_table *table)
 	{
 		new->id = id;
 		new->last_meal = 0;
+		new->i_should_stop = 0;
 		new->o = table->o;
 		new->l_fork = &(table->forks[id]);
 		new->r_fork = &(table->forks[(id + 1) % table->o.philo_nb]);
@@ -95,6 +96,8 @@ t_table	*create_forks_and_philos(t_table *table, unsigned int nb)
 			return (erase_table(table, table->o.philo_nb), free(table->forks), NULL);
 		i++;
 	}
+	if (pthread_mutex_init(&(table->enough_lock), NULL))
+		return (erase_table(table, table->o.philo_nb), free(table->forks), NULL);
 	return (table);
 }
 

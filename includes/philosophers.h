@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:54:12 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/27 08:57:37 by galauren         ###   ########.fr       */
+/*   Updated: 2025/07/30 06:38:32 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo_list
 	struct s_philo_list	*prev;
 	struct s_philo_list	*next;
 	t_table				*tblptr;
+	int					i_should_stop;
 }	t_philo_list;
 
 typedef struct s_table
@@ -55,6 +56,7 @@ typedef struct s_table
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		print_lock;				
 	pthread_mutex_t		death_lock;				
+	pthread_mutex_t		enough_lock;				
 	unsigned long long	start;
 	char				stop_it;
 	unsigned int		finished_count;
