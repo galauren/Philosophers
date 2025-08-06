@@ -80,11 +80,13 @@ void	*philo_do(void *ptr)
 		micro_sleeps(p->tblptr->start - get_time_in_ms());
 	if (p->tblptr->o.philo_nb == 1)
 		return (print_the_lonely_prompt(p));
-	if (p->id % 2 == 0)
-		usleep(200);
+	if (p->id % 2 == 0
+		&& !(p->id + 1 == p->tblptr->o.philo_nb
+			&& p->tblptr->o.philo_nb % 2 == 1))
+			usleep(200);
+	}
 	while (1)
 	{
-		usleep(1);
 		if (p->i_should_stop)
 			return (NULL);
 		pthread_mutex_lock(&(p->tblptr->death_lock));
@@ -94,6 +96,7 @@ void	*philo_do(void *ptr)
 		eating(p);
 		sleeping(p);
 		thinking(p);
+		usleep(500);
 	}
 	return (NULL);
 }
@@ -139,12 +142,13 @@ void	*the_great_judgment(void *table)
 				pthread_mutex_lock(&(t->death_lock));
 				t->stop_it = 1;
 				pthread_mutex_unlock(&(t->death_lock));
+				return (NULL);
 			}
 			else
 				pthread_mutex_unlock(&(p->meal_lock));
 			p = p->next;
 		}
-		usleep(1000);
+		usleep(500);
 	}
 	return (NULL);
 }
