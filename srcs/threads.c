@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:10:06 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/30 06:40:46 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/07 14:08:24 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,9 @@ void	*philo_do(void *ptr)
 		micro_sleeps(p->tblptr->start - get_time_in_ms());
 	if (p->tblptr->o.philo_nb == 1)
 		return (print_the_lonely_prompt(p));
-	if (p->id % 2 == 0
-		&& !(p->id + 1 == p->tblptr->o.philo_nb
-			&& p->tblptr->o.philo_nb % 2 == 1))
-			usleep(200);
-	}
+	if (p->id % 2 == 0 && !(p->id + 1 == p->tblptr->o.philo_nb
+		&& p->tblptr->o.philo_nb % 2 == 1))
+		usleep(200);
 	while (1)
 	{
 		if (p->i_should_stop)

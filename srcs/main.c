@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:46:44 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/30 06:30:39 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/07 14:04:26 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int	main(int ac, char **av)
 	get_time_since_start();
 	table.start = get_time_in_ms() + 1000;
 	table.finished_count = o.philo_nb;
-	printf("finished initialized : %d\n", table.finished_count);
 	if (create_table(&table, o) == NULL)
 		return (printf("Couldn't create table.\n"), 2);
 	if (o.philo_nb > 5000)
