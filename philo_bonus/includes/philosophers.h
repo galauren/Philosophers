@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:54:12 by galauren          #+#    #+#             */
-/*   Updated: 2025/07/30 06:38:32 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:59:17 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_options
 	int				has_meal_left;
 }	t_options;
 
-typedef struct s_table t_table;
+typedef struct s_table	t_table;
 
 typedef struct s_philo_list
 {
@@ -74,6 +74,7 @@ int				dinner_time(t_table *table);
 void			eating(t_philo_list *p);
 void			sleeping(t_philo_list *p);
 void			thinking(t_philo_list *p);
+int				get_stop(t_philo_list *p);
 
 /*
 **--------------------------------
@@ -90,6 +91,9 @@ void			micro_sleeps(unsigned long duration);
 void			smart_sleep(t_philo_list *p, unsigned long duration);
 void			philo_status_print(t_philo_list *p, char *msg);
 void			*print_too_much_prompt(t_philo_list *p);
+void			*print_too_much_prompt(t_philo_list *p);
+void			*print_the_lonely_prompt(t_philo_list *p);
+void			philo_status_print(t_philo_list *p, char *msg);
 
 /*
  /-------------------------------\

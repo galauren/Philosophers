@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:46:44 by galauren          #+#    #+#             */
-/*   Updated: 2025/08/07 14:04:26 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/25 16:54:21 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ t_options	*set_program(int ac, char **av, t_options *o)
 		o->has_meal_left = 1;
 		tmp = ft_strtod(av[5]);
 		if (tmp == NAN || !(tmp >= 0.0 && tmp / (double)UINT_MAX <= 1))
-			return (printf("'The nummber of Meals left' has not been set correctly.\n"), NULL);
+			return (printf("'The number of Meals left'\
+ has not been set correctly.\n"), NULL);
 		o->meal_left = (unsigned int)tmp;
 		if (o->meal_left == 0)
-			return (printf("0 meal_left ? then let's just stop it before initializing.\n"), NULL);
+			return (printf("0 meal_left ?\
+ then let's just stop it before initializing.\n"), NULL);
 	}
 	if (o->philo_nb == 0
 		|| o->die == 0
@@ -76,9 +78,9 @@ void	print_philoinit(t_options o)
 			[time_to_die] : %u\n\
 			[time_to_eat] : %u\n\
 			[time_to_sleep] : %u\n\
-			(number_of_times_each_philosopher_must_eat) : %u(%s)\n\n\n\n",
-				o.philo_nb, la_decision, o.die, o.eat, o.sleep, o.meal_left,
-				o.has_meal_left ? "set" : "unset");
+			(number_of_times_each_philosopher_must_eat) : %u(%d)\n\n\n\n",
+		o.philo_nb, la_decision, o.die, o.eat, o.sleep, o.meal_left,
+		o.has_meal_left);
 }
 
 int	main(int ac, char **av)

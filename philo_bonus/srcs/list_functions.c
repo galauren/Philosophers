@@ -6,26 +6,18 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 21:48:39 by glaurent          #+#    #+#             */
-/*   Updated: 2025/07/30 06:39:54 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/25 23:00:35 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	erase_table(t_table *table, int forks_to_free)
+void	erase_forks_and_philos(t_table *table, int forks_to_free)
 {
 	t_philo_list	*current;
 	t_philo_list	*next;
-	int		i;
+	int				i;
 
-	if (!table)
-		return ;
-	if (!pthread_mutex_lock(&(table->print_lock)))
-		if (!pthread_mutex_unlock(&(table->print_lock)))
-			pthread_mutex_destroy(&(table->print_lock));
-	if (!pthread_mutex_lock(&(table->death_lock)))
-		if (!pthread_mutex_unlock(&(table->death_lock)))
-			pthread_mutex_destroy(&(table->death_lock));
 	i = -1;
 	while (++i < forks_to_free)
 		pthread_mutex_destroy(&(table->forks[i]));
@@ -46,6 +38,18 @@ void	erase_table(t_table *table, int forks_to_free)
 	free(table->pop);
 }
 
+void	erase_table(t_table *table, int forks_to_free)
+{
+	if (!table)
+		return ;
+	if (!pthread_mutex_lock(&(table->print_lock)))
+		if (!pthread_mutex_unlock(&(table->print_lock)))
+			pthread_mutex_destroy(&(table->print_lock));
+	if (!pthread_mutex_lock(&(table->death_lock)))
+		if (!pthread_mutex_unlock(&(table->death_lock)))
+			pthread_mutex_destroy(&(table->death_lock));
+	erase_forks_and_philos(table, forks_to_free);
+}
 
 t_philo_list	*add_philo(int id, t_table *table)
 {
@@ -83,21 +87,23 @@ t_table	*create_forks_and_philos(t_table *table, unsigned int nb)
 	table->forks = malloc(sizeof(pthread_mutex_t) * nb);
 	if (table->forks == NULL)
 		return (NULL);
-	while(i < nb)
+	while (i < nb)
 	{
 		if (pthread_mutex_init(&(table->forks[i]), NULL))
 			return (erase_table(table, i), free(table->forks), NULL);
 		i++;
 	}
 	i = 0;
-	while(i < nb)
+	while (i < nb)
 	{
 		if (!add_philo(i, table))
-			return (erase_table(table, table->o.philo_nb), free(table->forks), NULL);
+			return (erase_table(table, table->o.philo_nb),
+				free(table->forks), NULL);
 		i++;
 	}
 	if (pthread_mutex_init(&(table->enough_lock), NULL))
-		return (erase_table(table, table->o.philo_nb), free(table->forks), NULL);
+		return (erase_table(table, table->o.philo_nb),
+			free(table->forks), NULL);
 	return (table);
 }
 
@@ -122,7 +128,7 @@ t_table	*create_table(t_table *table, t_options o)
 	philo_root->tblptr = table;
 	table->stop_it = 0;
 	table->o = o;
-	table->pop = philo_root;	
+	table->pop = philo_root;
 	if (table->o.philo_nb > 5000)
 		return (table);
 	if (!create_forks_and_philos(table, o.philo_nb))
