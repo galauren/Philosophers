@@ -4,7 +4,7 @@ NAME	=	philo
 
 CC		=	cc
 
-CFLAGS  =	-Wall -Wextra -Werror -I$(HEADER_P) -MMD
+CFLAGS  =	-Wall -Wextra -Werror -pthread -I$(HEADER_P) -MMD
 
 DEBUG	=	-g3 -fsanitize=thread
 

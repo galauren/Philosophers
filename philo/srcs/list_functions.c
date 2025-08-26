@@ -6,7 +6,7 @@
 /*   By: glaurent <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 21:48:39 by glaurent          #+#    #+#             */
-/*   Updated: 2025/08/25 23:00:35 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:11:15 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ void	erase_table(t_table *table, int forks_to_free)
 	if (!pthread_mutex_lock(&(table->death_lock)))
 		if (!pthread_mutex_unlock(&(table->death_lock)))
 			pthread_mutex_destroy(&(table->death_lock));
+	if (!pthread_mutex_lock(&(table->enough_lock)))
+		if (!pthread_mutex_unlock(&(table->enough_lock)))
+			pthread_mutex_destroy(&(table->enough_lock));
 	erase_forks_and_philos(table, forks_to_free);
 }
 
@@ -84,6 +87,8 @@ t_table	*create_forks_and_philos(t_table *table, unsigned int nb)
 	unsigned int	i;
 
 	i = 0;
+	if (nb > 5000)
+		return (table);
 	table->forks = malloc(sizeof(pthread_mutex_t) * nb);
 	if (table->forks == NULL)
 		return (NULL);
@@ -101,9 +106,6 @@ t_table	*create_forks_and_philos(t_table *table, unsigned int nb)
 				free(table->forks), NULL);
 		i++;
 	}
-	if (pthread_mutex_init(&(table->enough_lock), NULL))
-		return (erase_table(table, table->o.philo_nb),
-			free(table->forks), NULL);
 	return (table);
 }
 
@@ -112,12 +114,14 @@ t_table	*create_table(t_table *table, t_options o)
 	t_philo_list	*philo_root;
 
 	if (pthread_mutex_init(&(table->print_lock), NULL))
-		return (NULL);
+		return (erase_table(table, 0), NULL);
 	if (pthread_mutex_init(&(table->death_lock), NULL))
-		return (pthread_mutex_destroy(&(table->print_lock)), NULL);
+		return (erase_table(table, 0), NULL);
+	if (pthread_mutex_init(&(table->enough_lock), NULL))
+		return (erase_table(table, 0), NULL);
 	philo_root = malloc(sizeof(t_philo_list));
 	if (philo_root == NULL)
-		return (NULL);
+		return (erase_table(table, 0), NULL);
 	philo_root->id = -1;
 	philo_root->o = o;
 	philo_root->last_meal = table->start;
@@ -129,9 +133,7 @@ t_table	*create_table(t_table *table, t_options o)
 	table->stop_it = 0;
 	table->o = o;
 	table->pop = philo_root;
-	if (table->o.philo_nb > 5000)
-		return (table);
 	if (!create_forks_and_philos(table, o.philo_nb))
-		return (free(philo_root), NULL);
+		return (NULL);
 	return (table);
 }
