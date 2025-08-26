@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:10:06 by galauren          #+#    #+#             */
-/*   Updated: 2025/08/25 23:01:40 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:35:57 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	*philo_do(void *ptr)
 		micro_sleeps(p->tblptr->start - get_time_in_ms());
 	if (p->tblptr->o.philo_nb == 1)
 		return (print_the_lonely_prompt(p));
-	if ((unsigned)p->id % 2 == 0 && !((unsigned)p->id + 1 == p->tblptr->o.philo_nb
+	if ((unsigned)p->id % 2 == 0
+		&& !((unsigned)p->id + 1 == p->tblptr->o.philo_nb
 			&& p->tblptr->o.philo_nb % 2 == 1))
 		usleep(200);
 	while (1)
@@ -50,7 +51,8 @@ int	create_philo_threads(t_philo_list *philo)
 	while (ptr != philo && ptr->id != -1)
 	{
 		if (pthread_create(&(ptr->thread), NULL, &philo_do, ptr))
-			return (printf("Error: Couldn't create thread number %d\n", i), 1);
+			return (printf("Error: Couldn't create \
+thread number %d\n", i), 1);
 		ptr = ptr->next;
 		++i;
 	}

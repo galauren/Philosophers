@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 20:46:44 by galauren          #+#    #+#             */
-/*   Updated: 2025/08/25 16:54:21 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:42:02 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,10 @@ int	main(int ac, char **av)
 	{
 		micro_sleeps(1000);
 		print_too_much_prompt(table.pop);
-		return (erase_table(&table, 0), 3);
+		return (erase_table(&table), 3);
 	}
 	else if (dinner_time(&table))
-	{
-		printf("The dinner had to stop unexpectedly.\n");
-		return (erase_table(&table, o.philo_nb), 4);
-	}
-	return (erase_table(&table, o.philo_nb), 0);
+		return (printf("The dinner had to stop unexpectedly.\n"),
+			erase_table(&table), 4);
+	return (erase_table(&table), 0);
 }

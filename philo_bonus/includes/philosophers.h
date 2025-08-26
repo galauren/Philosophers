@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:54:12 by galauren          #+#    #+#             */
-/*   Updated: 2025/08/25 22:59:17 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:45:22 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <semaphore.h>
 
 typedef struct s_options
 {
@@ -39,8 +40,7 @@ typedef struct s_philo_list
 	pthread_t			thread;
 	unsigned long long	last_meal;
 	t_options			o;
-	pthread_mutex_t		*l_fork;				
-	pthread_mutex_t		*r_fork;				
+	sem_t				*forks;				
 	pthread_mutex_t		meal_lock;				
 	struct s_philo_list	*prev;
 	struct s_philo_list	*next;
@@ -53,7 +53,7 @@ typedef struct s_table
 	t_options			o;
 	t_philo_list		*pop;
 	pthread_t			j_thread;
-	pthread_mutex_t		*forks;
+	sem_t				*forks;
 	pthread_mutex_t		print_lock;				
 	pthread_mutex_t		death_lock;				
 	pthread_mutex_t		enough_lock;				
@@ -104,6 +104,6 @@ void			philo_status_print(t_philo_list *p, char *msg);
 */
 
 t_table			*create_table(t_table *table, t_options o);
-void			erase_table(t_table *table, int forks_to_free);
+void			erase_table(t_table *table);
 
 #endif
