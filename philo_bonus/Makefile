@@ -49,7 +49,7 @@ $(NAME)	:	$(OBJ)
 $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@mkdir -p $(OBJ_PATH)
 	@$(CC) $(CFLAGS) -MMD -o $@ -c $<
-	@printf "\e[1;30mTrying to compile : \e[1;37m./%-51s\e[1;0m" "$<"
+	@printf "\e[3;32mTrying to compile : \e[0m\e[1;37m./%-51s\e[1;0m" "$<"
 	@printf "\e[32mcheck\e[1;0m\n"
 
 d	:	debug
