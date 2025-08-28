@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 17:37:42 by galauren          #+#    #+#             */
-/*   Updated: 2025/08/28 05:17:39 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/28 05:32:36 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	philo_status_print(t_philo_list *p, char *msg)
 	pthread_mutex_unlock(&(p->tblptr->death_lock));
 	pthread_mutex_unlock(&(p->tblptr->print_lock));
 }
+
 void	*print_too_much_prompt(t_philo_list *p)
 {
 	philo_status_print(p, " Some were trying desperatly to breath\n");
