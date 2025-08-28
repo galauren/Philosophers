@@ -6,7 +6,7 @@
 /*   By: galauren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 17:37:42 by galauren          #+#    #+#             */
-/*   Updated: 2025/08/28 05:09:04 by galauren         ###   ########.fr       */
+/*   Updated: 2025/08/28 05:33:49 by galauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static int	hash_id(int id)
 {
 	id = (id ^ 61);
-	id = id * 0x9E3779B1; // constante de Knuth
-	return (id & 0xFFFFFF); // 24 bits pour RGB
+	id = id * 0x9E3779B1;
+	return (id & 0xFFFFFF);
 }
 
 void	philo_status_print(t_philo_list *p, char *msg)
@@ -25,14 +25,15 @@ void	philo_status_print(t_philo_list *p, char *msg)
 	int	g;
 	int	b;
 
-    r = (hash_id(p->id) >> 16) & 0xFF;
-    g = (hash_id(p->id) >> 8) & 0xFF;
-    b = hash_id(p->id) & 0xFF;
+	r = (hash_id(p->id) >> 16) & 0xFF;
+	g = (hash_id(p->id) >> 8) & 0xFF;
+	b = hash_id(p->id) & 0xFF;
 	pthread_mutex_lock(&(p->tblptr->print_lock));
 	pthread_mutex_lock(&(p->tblptr->death_lock));
 	pthread_mutex_lock(&(p->tblptr->enough_lock));
 	if (!p->tblptr->stop_it)
-		printf("\e[33m%ld\e[0mms :\t[\e[38;2;%d;%d;%dm %d \e[0m]%s\n", get_time_since_start(), r, g, b, p->id + 1, msg);
+		printf("\e[33m%ld\e[0mms :\t[\e[38;2;%d;%d;%dm %d \e[0m]%s\n",
+			get_time_since_start(), r, g, b, p->id + 1, msg);
 	pthread_mutex_unlock(&(p->tblptr->enough_lock));
 	pthread_mutex_unlock(&(p->tblptr->death_lock));
 	pthread_mutex_unlock(&(p->tblptr->print_lock));
